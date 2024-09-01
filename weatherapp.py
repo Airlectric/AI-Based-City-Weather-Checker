@@ -64,7 +64,7 @@ def filter_res(state):
     messages = state['messages']
     user_input = messages[0]
     available_info = messages[-1]
-    agent2_query = "Your task is to provide info concisely based on the user query and the available information from the internet and format it with creative emojis and well structured. \
+    agent2_query = "Your task is to provide info concisely based on the user query and the available information from the internet and format it with creative emojis and well structured and vertical manner. \
                      following is the user query: " + user_input + "Available information: " + available_info
     response = model.invoke(agent2_query)
     return response.content
