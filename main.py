@@ -1,11 +1,11 @@
 import streamlit as sl
 import streamlit.components.v1 as com
 
-from weatherapp import app 
+from weatherapp import checkWeather 
 
 def get_weather(user_input):
     input = {"messages": [user_input]}
-    response = app.invoke(input)
+    response = checkWeather.invoke(input)
     sl.session_state["response"] = response
     
 

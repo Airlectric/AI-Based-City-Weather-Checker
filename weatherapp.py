@@ -1,17 +1,14 @@
-from dotenv import load_dotenv
-import os
 from langchain_groq import ChatGroq
 from langchain.agents import Tool
 from langchain.tools.base import BaseTool
 from langgraph.graph import Graph
 import requests
-
+import streamlit as sl
 
 #AI Model
 
-load_dotenv()
 
-os.environ['GROQ_API_KEY'] = os.environ.get("GROQ_API_KEY")
+groq_api_key = sl.secrets["general"]["GROQ_API_KEY"]
 
 model = ChatGroq(
     model="mixtral-8x7b-32768",
@@ -19,6 +16,7 @@ model = ChatGroq(
     max_tokens=None,
     timeout=None,
     max_retries=2,
+    groq_api_key=groq_api_key,
 )
 
 
@@ -34,7 +32,7 @@ class TomorrowIOWeatherTool(BaseTool):
             "fields": ["temperature", "cloudCover"],
             "units": "imperial",
             "timesteps": "1d",
-            "apikey": os.environ["TOMORROWDOTIO_API_KEY"]
+            "apikey": sl.secrets["general"]["TOMORROWDOTIO_API_KEY"]
         }
         response = requests.request("GET", url, params=querystring)
         return response.text
@@ -82,6 +80,6 @@ workflow.add_edge('weather tool', 'responder')
 workflow.set_entry_point('agent')
 workflow.set_finish_point('responder')
 
-app = workflow.compile()
+checkWeather = workflow.compile()
 
 
